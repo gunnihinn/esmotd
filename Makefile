@@ -1,4 +1,14 @@
-CFLAGS+=-std=c99
+bin=esmotd
+src=src/main.c
+target=/usr/bin
 
-all:
-	$(CC) $(CFLAGS) -o esmotd src/main.c
+CFLAGS+=-std=c99 -Wall
+
+$(bin): $(src)
+	$(CC) $(CFLAGS) -o $(bin) $(src)
+
+install: $(bin)
+	install $(bin) $(target)
+
+clean:
+	rm -f $(bin)
