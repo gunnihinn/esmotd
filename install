@@ -29,7 +29,7 @@ sub find_install_dir {
             grep { not $_ =~ /($blacklist)/i }
             grep { -d $_ and -w $_ }
             split /:/, $ENV{PATH};
-        $path = $paths[0];
+        $path = $paths[0] if @paths;
     }
 
     die "Don't have write permissions on any directory in \$PATH" if not $path;
