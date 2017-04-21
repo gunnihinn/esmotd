@@ -13,6 +13,7 @@ int main(int argc, char* argv[]) {
             "Here's what you get, for things that haven't happened yet.",
             "See you later, if I see you at all.",
             "Sunshine, been keeping me up for days.",
+            "Go off to sleep in the sunshine, I don’t want to see the day when it’s dying",
         };
 
         int i = rand() % ARR_SIZE(motds);

@@ -1,0 +1,26 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+use v5.14;
+
+my @blacklisted_dirs = qw(
+    wine
+    python
+    perl
+    maven
+    apache
+);
+my $blacklist = join('|', @blacklisted_dirs);
+
+my @paths =
+    grep { not $_ =~ /($blacklist)/i }
+    grep { -d $_ and -w $_ }
+    split /:/, $ENV{PATH};
+die "Don't have write permissions on any directory in \$PATH" if not @paths;
+
+my $bin = "esmotd";
+my $dir = $paths[0];
+system "install $bin $dir";
+
+exit $? >> 0;
