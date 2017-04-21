@@ -4,6 +4,10 @@ use strict;
 use warnings;
 use v5.14;
 
+use File::Basename;
+
+my $bin = "esmotd";
+
 my @blacklisted_dirs = qw(
     wine
     python
@@ -13,14 +17,27 @@ my @blacklisted_dirs = qw(
 );
 my $blacklist = join('|', @blacklisted_dirs);
 
-my @paths =
-    grep { not $_ =~ /($blacklist)/i }
-    grep { -d $_ and -w $_ }
-    split /:/, $ENV{PATH};
-die "Don't have write permissions on any directory in \$PATH" if not @paths;
+sub find_install_dir {
+    my ($bin, $blacklist) = @_;
 
-my $bin = "esmotd";
-my $dir = $paths[0];
+    my $path;
+    my $installed = `which $bin 2>/dev/null`;
+    if ($? == 0) {
+        $path = dirname($installed);
+    } else {
+        my @paths =
+            grep { not $_ =~ /($blacklist)/i }
+            grep { -d $_ and -w $_ }
+            split /:/, $ENV{PATH};
+        $path = $paths[0];
+    }
+
+    die "Don't have write permissions on any directory in \$PATH" if not $path;
+
+    return $path;
+}
+
+my $dir = find_install_dir($bin, $blacklist);
 system "install $bin $dir";
 
 exit $? >> 0;
