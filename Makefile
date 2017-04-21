@@ -8,7 +8,7 @@ $(bin): $(src)
 	$(CC) $(CFLAGS) -o $(bin) $(src)
 
 install: $(bin)
-	install $(bin) $(target)
+	./install
 
 clean:
 	rm -f $(bin)
